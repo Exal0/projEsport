@@ -19,12 +19,10 @@ model Player {
   pseudo    String   @unique
   email     String   @unique
   password  String
-  gameId    String?
-  rankId    String?
-  equipeId  String?
+  gameId    Int?
+  rankId    Int?
   game      Game?    @relation(fields: [gameId], references: [id])
   rank      Rank?    @relation(fields: [rankId], references: [id])
-  equipe    Equipe?  @relation(fields: [equipeId], references: [id])
   roles     Role[]   @relation("PlayerRole")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -36,20 +34,17 @@ model Game {
   ranks     Rank[]
   roles     Role[]
   equipes   Equipe[]
- players Player[]
-
+  players Player[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Rank {
-  id      String  @id @default(uuid())
+  id      Int  @id @default(autoincrement())
   name    String  @unique
-  gameId  String
-
+  gameId  Int
   game    Game    @relation(fields: [gameId], references: [id])
   players Player[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -57,11 +52,9 @@ model Rank {
 model Role {
  id        Int   @id @default(autoincrement())
   name    String
-  gameId  String
-
+  gameId  Int
   game    Game    @relation(fields: [gameId], references: [id])
   players Player[] @relation("PlayerRole")
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -69,11 +62,8 @@ model Role {
 model Equipe {
   id        Int   @id @default(autoincrement())
   name     String   @unique
-  gameId   String
-
+  gameId   Int
   game     Game     @relation(fields: [gameId], references: [id])
- players Player[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

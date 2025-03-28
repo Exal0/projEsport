@@ -1,0 +1,32 @@
+{% extends "../layouts/base.twig" %}
+{% block title %}
+	<title>
+		{{title}}
+	</title>
+{% endblock %}
+
+
+{% block style %}
+	<link rel="stylesheet" href="assets/css/output.css">
+	<link rel="stylesheet" href="assets/css/login.css">
+{% endblock %}
+
+{% block main %}
+
+	<main>
+		<form action="/login" method='post'>
+			<div>
+				<label for="pseudo" class="block text-sm font-medium text-neon-green">Pseudo</label>
+				<input type="text" id="pseudo" name="pseudo" required class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+			</div>
+
+			<div>
+				<label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+				<input type="password" id="password" name="password" required class="mt-1 w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+			</div>
+
+
+		</form>
+	</main>
+
+{% endblock main %}
