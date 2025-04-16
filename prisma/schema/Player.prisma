@@ -1,0 +1,14 @@
+model Player {
+  id        Int   @id @default(autoincrement())
+  pseudo    String   @unique
+  email     String   @unique
+  password  String
+  confirm_password String
+  gameId    Int?
+  rankId    Int?
+  game      Game?    @relation(fields: [gameId], references: [id])
+  rank      Rank?    @relation(fields: [rankId], references: [id])
+  roles     Role[]   @relation("PlayerRole")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

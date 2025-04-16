@@ -1,52 +1,57 @@
 const authguard = require('../services/authguard')
 const {PrismaClient} = require('@prisma/client')
 const JoueurRouter = require('express').Router()
-
+const bcrypt = require('bcrypt')
 
 const prisma = new PrismaClient()
 
-JoueurRouter.get('/subscribe', (req,res)=>{
-    res.render("pages/subscribe.twig",
-    {
-        title: "Inscription"
-
+JoueurRouter.get('/subscribe', (req, res) => {
+    res.render("pages/subscribe.twig", {
+        title: "Inscription",
+        error: null
     })
 })
 
 
 
-JoueurRouter.post("/subscribe", authguard, async(req,res)=>{
-try {
-    if (req.body.password === req.body.confirm_password){       
-    
-    const player = await prisma.player.create({
-        data: {
-            pseudo: req.body.pseudo,
-            email: req.body.email,
-            password: req.body.password,
-            game: req.body.game,
-            role: req.body.role,
-            rank: req.body.rank,
-        }
-    })2
-alert("Inscription réussie")
-        res.redirect("/login")
-       
-        
-    }
+JoueurRouter.post('/subscribe', async (req, res) => {
+    try {
+        const { email, password, pseudo, confirm_password } = req.body
 
-    else throw ({confirm_password: "les mots de passe ne correspondent pas"})
-}
- catch (error){
-    if (error.code === "P2002"){
-        error={email: "Cet email est déjà utilisé"}
-        res.render("pages/subscribe.twig",{
-            error: error,
-            title: "Inscription"
+        if (password !== confirm_password) {
+            return res.status(400).json({ message: "Les mots de passe ne correspondent pas" })
+        }
+
+        const existpseudo = await prisma.player.findUnique({ where: { pseudo } });
+        if (existpseudo) {
+            return res.render('pages/subscribe.twig', { error: "Ce pseudo est déjà utilisé" });
+        }
+
+        const existingemail = await prisma.player.findUnique({ where: { email } });
+        if (existingemail) {
+            return res.render('pages/subscribe.twig', { error: "Cet email est déjà utilisé" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10)
+
+        const player = await prisma.player.create({
+            data: {
+                email: email,
+                password: hashedPassword,
+                pseudo: pseudo
+            }
         })
+
+        res.status(201).json({ message: "Joueur créé avec succès", player })
     }
-}
+    catch (error) {
+        console.error(error)
+        res.status(500).json({ message: "Erreur serveur" })
+    }
 })
+
+
+
 
 JoueurRouter.get('/login', (req, res)=> {
 res.render('pages/login.twig', {title: "Connexion"})

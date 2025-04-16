@@ -1,0 +1,9 @@
+model Role {
+ id        Int   @id @default(autoincrement())
+  name    String
+  gameId  Int
+  game    Game    @relation(fields: [gameId], references: [id])
+  players Player[] @relation("PlayerRole")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
