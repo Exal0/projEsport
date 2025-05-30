@@ -1,9 +1,0 @@
-model Rank {
-  id      Int  @id @default(autoincrement())
-  name    String  @unique
-  gameId  Int
-  game    Game    @relation(fields: [gameId], references: [id])
-  players Player[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}

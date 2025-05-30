@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./node_modules/@prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Equipe {
+  id        Int   @id @default(autoincrement())
+  name      String   @unique
+  gameId    Int
+  game      Game     @relation(fields: [gameId], references: [id])
+
+
+  tournaments Tournament[] @relation("TournamentEquipes")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Player {
+  id        Int   @id @default(autoincrement())
+  pseudo    String   @unique
+  email     String   @unique
+  password  String
+  confirm_password String
+  gameId    Int?
+  rankId    Int?
+  class     Class @default(USER)
+
+  game      Game?    @relation(fields: [gameId], references: [id])
+  rank      Rank?    @relation(fields: [rankId], references: [id])
+  roles     Role[]   @relation("PlayerRole")
+
+
+  tournaments Tournament[] @relation("TournamentPlayers")
+
+ 
+  createdTournaments Tournament[] @relation("TournamentCreatedBy")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Class {
+  USER
+  ADMIN
+  SUPERADMIN
+}
+
+
+
+model Tournament {
+  id          Int         @id @default(autoincrement()) 
+  title       String      @unique  
+  description String
+  image       String
+  Date        DateTime
+
+  
+  createdBy   Player   @relation("TournamentCreatedBy", fields: [createdById], references: [id])
+  createdById Int
+
+  players     Player[]  @relation("TournamentPlayers")
+  teams       Equipe[]  @relation("TournamentEquipes")
+}
+
+model Game {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  ranks     Rank[]
+  roles     Role[]
+  equipes   Equipe[]
+  players   Player[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Rank {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  gameId    Int
+  game      Game     @relation(fields: [gameId], references: [id])
+  players   Player[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String
+  gameId    Int
+  game      Game     @relation(fields: [gameId], references: [id])
+  players   Player[] @relation("PlayerRole")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

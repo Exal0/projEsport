@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `player` ADD COLUMN `class` ENUM('USER', 'ADMIN') NOT NULL DEFAULT 'USER';

@@ -38,16 +38,21 @@ JoueurRouter.post('/subscribe', async (req, res) => {
             data: {
                 email: email,
                 password: hashedPassword,
-                pseudo: pseudo
+                pseudo: pseudo,
+                confirm_password: hashedPassword,
+                class: 'USER'
             }
         })
 
-        res.status(201).json({ message: "Joueur créé avec succès", player })
+        return res.redirect('/login')
+       
     }
     catch (error) {
         console.error(error)
         res.status(500).json({ message: "Erreur serveur" })
     }
+
+    
 })
 
 
