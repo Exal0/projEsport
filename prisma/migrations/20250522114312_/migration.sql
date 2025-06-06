@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `player` MODIFY `class` ENUM('USER', 'ADMIN', 'SUPERADMIN') NOT NULL DEFAULT 'USER';

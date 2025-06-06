@@ -9,11 +9,25 @@
     <link rel="stylesheet" href="assets/css/home.css">
 {% endblock %}
 
- {% block script %}
-        <script src="assets/js/homeScript.js"></script>
-    {% endblock %}
+{% block script %}
+    <script src="assets/js/homeScript.js"></script>
+{% endblock %}
 
 {% block main %}
+
+{% if user.fonction == 'SUPERADMIN' %}
+    <div class="bg-red-600 p-4 rounded mb-4 text-white font-bold">
+        🚀 Bienvenue Superadmin ! Vous avez tous les pouvoirs.
+    </div>
+{% elseif user.fonction == 'ADMIN' %}
+    <div class="bg-blue-600 p-4 rounded mb-4 text-white font-bold">
+        🔧 Bonjour Admin, vous pouvez gérer les utilisateurs.
+    </div>
+{% else %}
+    <div class="bg-green-600 p-4 rounded mb-4 text-white font-bold">
+        👋 Salut {{ user.pseudo }}, bienvenue sur la plateforme !
+    </div>
+{% endif %}
 <main class="bg-[#0e1320] text-white font-sans min-h-screen flex">
 
     <!-- Sidebar -->
@@ -39,47 +53,60 @@
             </div>
         </section>
 
+        <!-- Espace Superadmin -->
+        {% if user.part == 'SUPERADMIN' %}
+        <section class="bg-[#1f2937] p-6 rounded-xl">
+            <h2 class="text-xl font-bold text-red-400 mb-2">🛡️ Espace Superadmin</h2>
+            <p class="text-gray-300 text-sm mb-4">Accès total : gestion des admins, joueurs, tournois, paramètres globaux.</p>
+            <a href="/superadmin/dashboard" class="bg-red-600 px-4 py-2 rounded text-white text-sm font-bold">Accéder au panneau Superadmin</a>
+        </section>
+        {% endif %}
+
+        <!-- Espace Admin -->
+        {% if user.part == 'ADMIN' %}
+        <section class="bg-[#1f2937] p-6 rounded-xl">
+            <h2 class="text-xl font-bold text-orange-400 mb-2">⚙️ Espace Admin</h2>
+            <p class="text-gray-300 text-sm mb-4">Outils de modération, validation des équipes et contrôle des tournois.</p>
+            <a href="/admin/tools" class="bg-orange-500 px-4 py-2 rounded text-white text-sm font-bold">Accéder aux outils Admin</a>
+        </section>
+        {% endif %}
+
         <!-- Tournois en vedette -->
         <section>
-                
-              {% set tournois = [
-  {
-    image: 'tournament1.jpeg',
-    titre: 'Fortnite Cup Challenge',
-    description: 'Gagne jusqu’à 10 000 RP',
-    date: '15 juin 2025'
-  },
-  {
-    image: 'tournament2.jpeg',
-    titre: 'League of Legends Showdown',
-    description: 'Affronte les meilleures équipes de France',
-    date: '22 juin 2025'
-  },
-  {
-    image: 'tournament3.jpeg',
-    titre: 'Valorant Night Strike',
-    description: 'Tournoi 5v5 nocturne, niveau Plat+',
-    date: '30 juin 2025'
-  }
-] %}
-<h2 class="text-2xl font-bold mb-6">🎯 Tournois en vedette</h2>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-  {% for tournoi in tournois %}
-    <div class="bg-[#1f2937] rounded-xl p-4 hover:shadow-lg transition">
-      <img src="assets/images/{{ tournoi.image }}" alt="{{ tournoi.titre }}" class="rounded-lg mb-4 h-40 w-full object-cover">
-      <h3 class="text-lg font-semibold">{{ tournoi.titre }}</h3>
-      <p class="text-sm text-gray-400 mb-2">{{ tournoi.description }}</p>
-      <div class="flex justify-between items-center">
-        <span class="text-yellow-400 font-bold">{{ tournoi.date }}</span>
-        <a href="#" class="bg-blue-600 px-4 py-1 rounded text-white text-sm">S'inscrire</a>
-      </div>
-    </div>
-  {% endfor %}
-</div>
-
-
-             
+            {% set tournois = [
+                {
+                    image: 'tournament1.jpeg',
+                    titre: 'Fortnite Cup Challenge',
+                    description: 'Gagne jusqu’à 10 000 RP',
+                    date: '15 juin 2025'
+                },
+                {
+                    image: 'tournament2.jpeg',
+                    titre: 'League of Legends Showdown',
+                    description: 'Affronte les meilleures équipes de France',
+                    date: '22 juin 2025'
+                },
+                {
+                    image: 'tournament3.jpeg',
+                    titre: 'Valorant Night Strike',
+                    description: 'Tournoi 5v5 nocturne, niveau Plat+',
+                    date: '30 juin 2025'
+                }
+            ] %}
+            <h2 class="text-2xl font-bold mb-6">🎯 Tournois en vedette</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for tournoi in tournois %}
+                <div class="bg-[#1f2937] rounded-xl p-4 hover:shadow-lg transition">
+                    <img src="assets/images/{{ tournoi.image }}" alt="{{ tournoi.titre }}" class="rounded-lg mb-4 h-40 w-full object-cover">
+                    <h3 class="text-lg font-semibold">{{ tournoi.titre }}</h3>
+                    <p class="text-sm text-gray-400 mb-2">{{ tournoi.description }}</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-yellow-400 font-bold">{{ tournoi.date }}</span>
+                        <a href="#" class="bg-blue-600 px-4 py-1 rounded text-white text-sm">S'inscrire</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </section>
 
         <!-- Blog actualités -->
@@ -116,10 +143,3 @@
     </aside>
 </main>
 {% endblock %}
-
-
-
-  
-    
-
-

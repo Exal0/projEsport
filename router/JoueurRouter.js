@@ -22,15 +22,7 @@ JoueurRouter.post('/subscribe', async (req, res) => {
             return res.status(400).json({ message: "Les mots de passe ne correspondent pas" })
         }
 
-        const existpseudo = await prisma.player.findUnique({ where: { pseudo } });
-        if (existpseudo) {
-            return res.render('pages/subscribe.twig', { error: "Ce pseudo est déjà utilisé" });
-        }
-
-        const existingemail = await prisma.player.findUnique({ where: { email } });
-        if (existingemail) {
-            return res.render('pages/subscribe.twig', { error: "Cet email est déjà utilisé" });
-        }
+        
 
         const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -40,7 +32,7 @@ JoueurRouter.post('/subscribe', async (req, res) => {
                 password: hashedPassword,
                 pseudo: pseudo,
                 confirm_password: hashedPassword,
-                class: 'USER'
+                part: 'USER'
             }
         })
 
@@ -55,6 +47,68 @@ JoueurRouter.post('/subscribe', async (req, res) => {
     
 })
 
+
+JoueurRouter.get('/login', (req, res) => {
+    res.render('pages/login.twig', {
+        title: "Connexion",
+        error: null
+    });
+});
+
+
+JoueurRouter.post('/login', async (req, res) => {
+    const { pseudo, password } = req.body;
+
+    try {
+       
+        const player = await prisma.player.findFirst({ where: { pseudo } });
+
+        if (!player) {
+            return res.render('pages/login.twig', { 
+                title: "Connexion",
+                error: "Pseudo ou mot de passe incorrect"
+            });
+        }
+
+        
+        const valid = await bcrypt.compare(password, user.password);
+
+        if (!valid) {
+            return res.render('pages/login.twig', {
+                title: "Connexion",
+                error: "Pseudo ou mot de passe incorrect"
+            });
+        }
+
+       
+        req.session.user = {
+            id: user.id,
+            pseudo: user.pseudo,
+           part: user.part
+        };
+
+       
+        return res.redirect('/home');
+    } catch (error) {
+        console.error(error);
+        return res.status(500).render('pages/login.twig', {
+            title: "Connexion",
+            error: "Erreur serveur"
+        });
+    }
+});
+
+
+JoueurRouter.get('/home', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+
+    res.render('pages/home.twig', {
+        title: "Accueil",
+        user: req.session.user
+    });
+});
 
 
 

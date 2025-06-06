@@ -4,8 +4,13 @@
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --color-red-400: oklch(70.4% 0.191 22.216);
     --color-red-500: oklch(63.7% 0.237 25.331);
+    --color-red-600: oklch(57.7% 0.245 27.325);
+    --color-orange-400: oklch(75% 0.183 55.934);
+    --color-orange-500: oklch(70.5% 0.213 47.604);
     --color-yellow-400: oklch(85.2% 0.199 91.936);
+    --color-green-600: oklch(62.7% 0.194 149.214);
     --color-blue-400: oklch(70.7% 0.165 254.624);
     --color-blue-500: oklch(62.3% 0.214 259.815);
     --color-blue-600: oklch(54.6% 0.245 262.881);
@@ -263,6 +268,9 @@
   .hidden {
     display: none;
   }
+  .table {
+    display: table;
+  }
   .h-40 {
     height: calc(var(--spacing) * 40);
   }
@@ -421,8 +429,17 @@
   .bg-gray-900 {
     background-color: var(--color-gray-900);
   }
+  .bg-green-600 {
+    background-color: var(--color-green-600);
+  }
+  .bg-orange-500 {
+    background-color: var(--color-orange-500);
+  }
   .bg-purple-600 {
     background-color: var(--color-purple-600);
+  }
+  .bg-red-600 {
+    background-color: var(--color-red-600);
   }
   .bg-white {
     background-color: var(--color-white);
@@ -546,11 +563,17 @@
   .text-gray-800 {
     color: var(--color-gray-800);
   }
+  .text-orange-400 {
+    color: var(--color-orange-400);
+  }
   .text-purple-300 {
     color: var(--color-purple-300);
   }
   .text-purple-400 {
     color: var(--color-purple-400);
+  }
+  .text-red-400 {
+    color: var(--color-red-400);
   }
   .text-red-500 {
     color: var(--color-red-500);
